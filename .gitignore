@@ -1,0 +1,6 @@
+__MACOSX/
+venv/
+.venv/
+env/
+__pycache__/
+.vscode/

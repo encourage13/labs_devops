@@ -15,14 +15,14 @@ pipeline {
         stage('Service Checks') {
             parallel {
                 // Ветка для FastAPI-service
-                stage('Python Service') {
+                stage('FastAPI Service') {
                     stages {
                         stage('Python: Setup Environment') {
                             when {
                                 changeset "FastAPI-service/**"
                             }
                             steps {
-                                dir('python-service') {
+                                dir('FastAPI-service') {
                                     sh '${PYTHON} -m pip install -r requirements.txt'
                                     sh '${PYTHON} -m pip install -r requirements-dev.txt'
                                 }
@@ -30,10 +30,10 @@ pipeline {
                         }
                         stage('Python: Compilation Check') {
                             when {
-                                changeset "python-service/**"
+                                changeset "FastAPI-service/**"
                             }
                             steps {
-                                dir('python-service') {
+                                dir('FastAPI-service') {
                                     sh """
                                         ${PYTHON} -m py_compile server.py
                                         ${PYTHON} -m py_compile voicegen.py
@@ -44,30 +44,30 @@ pipeline {
                         }
                         stage('Python: Linting') {
                             when {
-                                changeset "python-service/**"
+                                changeset "FastAPI-service/**"
                             }
                             steps {
-                                dir('python-service') {
+                                dir('FastAPI-service') {
                                     sh 'ruff check .'
                                 }
                             }
                         }
                         stage('Python: TODO Check') {
                             when {
-                                changeset "python-service/**"
+                                changeset "FastAPI-service/**"
                             }
                             steps {
-                                dir('python-service') {
+                                dir('FastAPI-service') {
                                     sh 'bash ci-check.sh'
                                 }
                             }
                         }
                         stage('Python: Tests') {
                             when {
-                                changeset "python-service/**"
+                                changeset "FastAPI-service/**"
                             }
                             steps {
-                                dir('python-service') {
+                                dir('FastAPI-service') {
                                     sh 'pytest tests/ -v --tb=short'
                                 }
                             }
